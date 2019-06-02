@@ -27,3 +27,126 @@
     // * The bill value must be a positive float but your application must handle user input that might be a negative or 0 dollar amount (i.e. error handling).
     // * The user input percentage for the tip must be a positive float.
     // * The returned value must be a float rounded to two decimal points (i.e. accurate dollars and cents).
+
+// Function to calculate results based on input fields
+function handleCalculate(event) {
+
+    // Prevent the page from refreshing
+    d3.event.preventDefault();
+
+    // Grab values from input fields
+    var billAmt = d3.select("#bill-amt").property("value");
+    var tipPct = d3.select("#tip-pct").property("value");
+    var splitNum = d3.select("#split-num").property("value");
+
+    billAmt = +billAmt;
+    tipPct = +tipPct;
+    splitNum = +splitNum;
+
+    // Add error checking here
+
+    // Calculate tip
+    var tipAmt = billAmt * (tipPct / 100)
+    // Calculate total bill including tip
+    var totalBill = billAmt + tipAmt;
+    // Calculate split amount
+    var splitAmt = totalBill / splitNum;
+    // Create array of split amounts
+    var splitAmts = [];
+    var i;
+    for(i=0; i<splitNum; i++) {
+        splitAmts.push(splitAmt);
+    }
+
+    console.log(`Bill is ${billAmt}`);
+    console.log(`Tip % is ${tipPct}`);
+    console.log(`Split ${splitNum} ways`);
+    console.log("------------------------");
+    console.log(`Tip amount is ${tipAmt}`);
+    console.log(`Total bill with tip is ${totalBill}`);
+    console.log(`Split amount is ${splitAmt} per person`);
+    console.log(`Array of split amounts: ${splitAmts}`);
+    console.log("------------------------");
+    
+
+
+    // Build pie chart with array of split amounts
+    buildPie(splitAmts);
+}
+
+function handleClear(event) {
+
+    // Prevent the page from refreshing
+    d3.event.preventDefault();
+
+    // Clear input fields
+    document.getElementById('bill-amt').value = '';
+    document.getElementById('tip-pct').value = '';
+    document.getElementById('split-num').value = '';
+
+    // Delete current chart
+    d3.select("#table-pie").remove();
+}
+
+
+// Function to build pie chart with the split amounts
+function buildPie(splitAmts) {
+
+    // Create trace element using passed array
+    trace = {
+        type: 'pie',
+        values: splitAmts,
+        labels: []
+    };
+    
+    // Create layout element
+    var layout = {
+        margin: {
+            l: 50,
+            r: 50,
+            t: 50,
+            b: 50
+        }
+    }
+    
+    // Assign data variable for plotting
+    var data = [trace];
+    
+    // Draw pie chart
+    Plotly.newPlot("table-pie",data,layout);
+}
+
+// Function to create array and populate Split select dropdown
+function populateSplit() {
+    // Create array for Split select dropdown
+    var splitNums = [];
+    var i;
+    // Create array from 1 to 10 (increase '10' below to extend select dropdown)
+    for(i=1; i<=10; i++) {
+        splitNums.push(i);
+    }
+
+    // Select html element
+    var splitNum = d3.select("#split-num");
+
+    // Populate Split select dropdown
+    splitNums.forEach(function(number) {
+        var option = splitNum.append("option");
+        option.text(number);
+    });
+}
+
+// Declare variable for Filter Table button
+var calculateButton = d3.select("#calculate-btn");
+
+// Declare variable for Clear Filter button
+var clearButton = d3.select("#clear-btn");
+
+// Define Filter Table button action
+calculateButton.on("click",handleCalculate);
+
+// Define Clear Filter button action
+clearButton.on("click",handleClear);
+
+// Populate Split select dropdown on page load
+populateSplit();
