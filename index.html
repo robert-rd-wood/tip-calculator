@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tip Calculator PLUS</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Include required js elements for Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 jumbotron text-center">
+        <h1>Tip Calculator PLUS</h1>
+        <p>(The plus means it's better)</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <aside class="filters">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <form>
+                <div class="form-group">
+                  <ul class="list-group" id="filters">
+                    <li class="filter list-group-item">
+                      <label for="bill">Amount of bill</label>
+                      <input class="form-control" id="bill-amt" type="text">
+                    </li>
+                    <li class="filter list-group-item">
+                      <label for="tip">Tip percentage</label>
+                      <input class="form-control" id="tip-amt" type="text" placeholder="15">
+                    </li>
+                    <li class="filter list-group-item">
+                      <label for="split">Number of people<br>(if split is desired)</label>
+                      <input class="form-control" id="split-num" type="text" placeholder="1">
+                    </li>
+                  </ul>
+                </div>
+                <button id="filter-btn" type="submit" class="btn btn-primary">Calculate!</button>
+                <button id="clear-btn" type="submit" class="btn btn-warning">Clear Fields</button>
+              </form>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <div class="col-md-3">
+
+      </div>
+      <div class="col-md-6">
+        
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="static/js/app.js"></script>
+
+</body>
+
+</html>
