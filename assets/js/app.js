@@ -67,7 +67,7 @@ function handleCalculate(event) {
     console.log(`Split amount is ${splitAmt} per person`);
     console.log(`Array of split amounts: ${splitAmts}`);
     console.log("------------------------");
-    
+
 
 
     // Build pie chart with array of split amounts
@@ -92,22 +92,42 @@ function handleClear(event) {
 // Function to build pie chart with the split amounts
 function buildPie(splitAmts) {
 
+    // Create array for labels using length of passed value array
+    var i;
+    var labels = [];
+    var colors = [];
+    for(i=1; i<=splitAmts.length; i++) {
+        labels.push(i);
+        colors.push("#aa8153");
+    }
+
     // Create trace element using passed array
     trace = {
         type: 'pie',
+        labels: labels,
         values: splitAmts,
-        labels: []
+        text: splitAmts,
+        marker: {
+            colors: colors,
+            line: {
+                color: "#000000",
+                width: 1
+            },
+        },
+        
+        showlegend: false
     };
     
     // Create layout element
     var layout = {
         margin: {
-            l: 50,
-            r: 50,
-            t: 50,
-            b: 50
-        }
-    }
+            l: 10,
+            r: 10,
+            t: 10,
+            b: 10
+        },
+    
+    };
     
     // Assign data variable for plotting
     var data = [trace];
