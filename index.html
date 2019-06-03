@@ -32,15 +32,18 @@
             <div class="panel-body">
               <form>
                 <div class="form-group">
-                  <ul class="list-group" id="filters">
+                  <ul class="list-group" id="inputs">
+                    <!-- First input field -->
                     <li class="filter list-group-item">
                       <label for="bill">Total Bill</label>
                       <input class="form-control" id="bill-amt" type="text">
                     </li>
+                    <!-- Second input field -->
                     <li class="filter list-group-item">
                       <label for="tip">Desired Tip Percentage</label>
-                      <input class="form-control" id="tip-pct" type="text" placeholder="15">
+                      <input class="form-control" id="tip-pct" type="text">
                     </li>
+                    <!-- Third input field (select dropdown) -->
                     <li class="filter list-group-item">
                       <label for="split">Number of People<br>(change if split is desired)</label>
                       <select class="form-control" id="split-num" type="text">
@@ -48,6 +51,7 @@
                     </li>
                   </ul>
                 </div>
+                <!-- Calculate and Clear buttons -->
                 <button id="calculate-btn" type="submit" class="btn btn-primary">Calculate!</button>
                 <button id="clear-btn" type="submit" class="btn btn-warning">Clear Fields</button>
               </form>
@@ -55,10 +59,12 @@
           </div>
         </aside>
       </div>
-      <div class="col-md-3">
-
+      <div class="col-md-4">
+        <div id="results" style="max-width: 20rem;">
+          <!-- results to be added here -->
+        </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-5">
         <div id="table-pie">
           <!-- pie chart of table with split amounts to be added here -->
         </div>

@@ -43,14 +43,14 @@ function handleCalculate(event) {
     tipPct = +tipPct;
     splitNum = +splitNum;
 
+    ///////////////////////////////////////////////////////////////////////////////////////
     // Add error checking here
+    ///////////////////////////////////////////////////////////////////////////////////////
 
     // Calculate tip
     var tipAmt = billAmt * (tipPct / 100)
-    // Calculate total bill including tip
-    var totalBill = billAmt + tipAmt;
     // Calculate split amount
-    var splitAmt = totalBill / splitNum;
+    var splitAmt = tipAmt / splitNum;
     // Create array of split amounts
     var splitAmts = [];
     var i;
@@ -58,17 +58,18 @@ function handleCalculate(event) {
         splitAmts.push(splitAmt);
     }
 
-    console.log(`Bill is ${billAmt}`);
-    console.log(`Tip % is ${tipPct}`);
-    console.log(`Split ${splitNum} ways`);
-    console.log("------------------------");
-    console.log(`Tip amount is ${tipAmt}`);
-    console.log(`Total bill with tip is ${totalBill}`);
-    console.log(`Split amount is ${splitAmt} per person`);
-    console.log(`Array of split amounts: ${splitAmts}`);
-    console.log("------------------------");
+    // console.log(`Bill is ${billAmt}`);
+    // console.log(`Tip % is ${tipPct}`);
+    // console.log(`Split ${splitNum} ways`);
+    // console.log("------------------------");
+    // console.log(`Tip amount is ${tipAmt}`);
+    // console.log(`Split amount is ${splitAmt} per person`);
+    // console.log(`Array of split amounts: ${splitAmts}`);
+    // console.log("------------------------");
 
 
+    // Display results
+    displayResults(tipAmt,splitNum,splitAmt);
 
     // Build pie chart with array of split amounts
     buildPie(splitAmts);
@@ -85,14 +86,43 @@ function handleClear(event) {
     document.getElementById('split-num').value = '';
 
     // Delete current chart
-    d3.select("#table-pie").remove();
+    d3.select("#table-pie>div").remove();
+
+    // Delete results
+    d3.selectAll("#results>div").remove();
+
+    // Remove card class from Results div
+    d3.select("#results").attr("class","");
+}
+
+// Function to display calculation results
+function displayResults(tipAmt,splitNum,splitAmt) {
+
+    // Select Results div
+    var results = d3.select("#results");
+
+    // Assign card class to Results div
+    results.attr("class","card border-primary mb-3")
+
+    // Clear any previous results
+    d3.selectAll("#results>div").remove();
+
+    // Display results
+    var resultCard = results.append("div").text(`Results`).attr("class","card-header");
+    var resultCardBody = results.append("div").attr("class","card-body");
+    resultCardBody.append("p").text(`Tip Amount: ${tipAmt}`).attr("class","card-text");
+    // If the split option was chosen, display split information
+    if (splitNum > 1) {
+        resultCardBody.append("p").text(`Split between ${splitNum} people...`).attr("class","card-text");
+        resultCardBody.append("p").text(`Tip per Person: ${splitAmt}`).attr("class","card-text");    
+    }
 }
 
 
 // Function to build pie chart with the split amounts
 function buildPie(splitAmts) {
 
-    // Create array for labels using length of passed value array
+    // Create array for labels and colors using length of passed value array
     var i;
     var labels = [];
     var colors = [];
@@ -106,7 +136,8 @@ function buildPie(splitAmts) {
         type: 'pie',
         labels: labels,
         values: splitAmts,
-        text: splitAmts,
+        textinfo: 'value',
+        hole: .35,
         marker: {
             colors: colors,
             line: {
@@ -114,7 +145,6 @@ function buildPie(splitAmts) {
                 width: 1
             },
         },
-        
         showlegend: false
     };
     
@@ -123,10 +153,10 @@ function buildPie(splitAmts) {
         margin: {
             l: 10,
             r: 10,
-            t: 10,
+            t: 0,
             b: 10
         },
-    
+        hovermode: false
     };
     
     // Assign data variable for plotting
