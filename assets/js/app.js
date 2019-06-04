@@ -151,19 +151,35 @@ function buildPie(splitAmts) {
     // Create layout element
     var layout = {
         margin: {
-            l: 10,
-            r: 10,
+            l: 0,
+            r: 0,
             t: 0,
-            b: 10
+            b: 0
         },
-        hovermode: false
+        hovermode: false,
+        height: "width"
     };
     
     // Assign data variable for plotting
     var data = [trace];
     
+
+    // Select Results div
+    var pieDiv = d3.select("#table-pie");
+
+    // Assign card class to Results div
+    pieDiv.attr("class","card border-primary mb-3")
+
+    // Clear any previous results
+    d3.selectAll("#table-pie>div").remove();
+
+    // Display results
+    var pieCard = pieDiv.append("div").text(`Useful* Visualization`).attr("class","card-header");
+    var pieCardBody = pieDiv.append("div").attr("class","card-body").attr("id","pie-chart");
+
     // Draw pie chart
-    Plotly.newPlot("table-pie",data,layout);
+    Plotly.newPlot("pie-chart",data,layout,{displayModeBar: false},{responsive: true});
+    pieCardBody.append("p").text("*Usefulness may vary").attr("class","card-text"); 
 }
 
 // Function to create array and populate Split select dropdown
