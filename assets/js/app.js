@@ -39,18 +39,64 @@ function handleCalculate(event) {
     var tipPct = d3.select("#tip-pct").property("value");
     var splitNum = d3.select("#split-num").property("value");
 
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Add error checking here
+    // bill and tip fields
+
+    // Bill amount - strip leading $ if exists
+    if (billAmt[0] == "$") {
+        billAmt = billAmt.slice(1, billAmt.length);
+    }
+    // Tip percentage - strip trailing % if exists
+    if (tipPct[tipPct.length-1] == "%") {
+        tipPct = tipPct.slice(0, tipPct.length-1);
+    }
+
+    // Check to see if Bill amount and Tip percentage are numbers
+    if (isNaN(billAmt)) {
+        // if not, throw an error, reset the field, and exit the function
+
+    }
+    if (isNaN(tipPct)) {
+        // if not, throw an error, reset the field, and exit the function
+
+    }
+
+    // Check to see if Bill Amount and Tip Percentage are > 0
+    if (billAmt <=0) {
+        // if not, throw an error, reset the field, and exit the function
+
+    }
+    if (tipPct <=0) {
+        // if not, throw an error, reset the field, and exit the function
+
+    }
+
+    // Check if the tip was entered as decimal instead of %
+    if (tipPct < 1) {
+        // multiply by 100
+        tipPct *= 100;
+    }
+
+    // Cast variables as numbers
     billAmt = +billAmt;
     tipPct = +tipPct;
     splitNum = +splitNum;
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // Add error checking here
     ///////////////////////////////////////////////////////////////////////////////////////
 
     // Calculate tip
     var tipAmt = billAmt * (tipPct / 100)
     // Calculate split amount
     var splitAmt = tipAmt / splitNum;
+
+
+    // Round Tip Amount and Split Amount to two-decimal floats
+    tipAmt = +tipAmt.toFixed(2);
+    splitAmt = +splitAmt.toFixed(2);
 
 
     // console.log(`Bill is ${billAmt}`);
@@ -82,6 +128,7 @@ function handleCalculate(event) {
     }
 }
 
+// Function to clear fields and remove Results and pie chart divs
 function handleClear(event) {
 
     // Prevent the page from refreshing
@@ -117,11 +164,11 @@ function displayResults(tipAmt,splitNum,splitAmt) {
     // Display results
     var resultCard = results.append("div").text(`Results`).attr("class","card-header");
     var resultCardBody = results.append("div").attr("class","card-body");
-    resultCardBody.append("p").text(`Tip Amount: ${tipAmt}`).attr("class","card-text");
+    resultCardBody.append("p").text(`Tip Amount: $${tipAmt}`).attr("class","card-text");
     // If the split option was chosen, display split information
     if (splitNum > 1) {
         resultCardBody.append("p").text(`Split between ${splitNum} people...`).attr("class","card-text");
-        resultCardBody.append("p").text(`Tip per Person: ${splitAmt}`).attr("class","card-text");    
+        resultCardBody.append("p").text(`Tip per Person: $${splitAmt}`).attr("class","card-text");    
     }
 }
 
@@ -129,13 +176,15 @@ function displayResults(tipAmt,splitNum,splitAmt) {
 // Function to build pie chart with the split amounts
 function buildPie(splitAmts) {
 
-    // Create array for labels and colors using length of passed value array
+    // Create arrays for labels, colors, and text using length of passed value array
     var i;
     var labels = [];
     var colors = [];
-    for(i=1; i<=splitAmts.length; i++) {
-        labels.push(i);
-        colors.push("#aa8153");
+    var splitAmtsFormatted = [];
+    for(i=0; i<splitAmts.length; i++) {
+        labels.push(i+1);
+        colors.push("#af8555");
+        splitAmtsFormatted.push(`$${splitAmts[i]}`);
     }
 
     // Create trace element using passed array
@@ -143,7 +192,8 @@ function buildPie(splitAmts) {
         type: 'pie',
         labels: labels,
         values: splitAmts,
-        textinfo: 'value',
+        text: splitAmtsFormatted,
+        textinfo: 'text',
         hole: .35,
         marker: {
             colors: colors,
@@ -188,7 +238,7 @@ function buildPie(splitAmts) {
 
     // Draw pie chart
     Plotly.newPlot("pie-chart",data,layout,{displayModeBar: false},{responsive: true});
-    pieCardBody.append("p").text("*Usefulness may vary").attr("class","card-text").attr("style","font-size:small"); 
+    pieCardBody.append("p").text("*Actual usefulness may vary").attr("class","card-text").attr("style","font-size:small"); 
 }
 
 // Function to create array and populate Split select dropdown
@@ -225,3 +275,7 @@ clearButton.on("click",handleClear);
 
 // Populate Split select dropdown on page load
 populateSplit();
+
+// When the browser window is resized, handleCalculate() is called
+// to generate a rescaled pie chart
+d3.select(window).on("resize", handleCalculate);
