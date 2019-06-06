@@ -51,12 +51,7 @@ function handleCalculate(event) {
     var tipAmt = billAmt * (tipPct / 100)
     // Calculate split amount
     var splitAmt = tipAmt / splitNum;
-    // Create array of split amounts
-    var splitAmts = [];
-    var i;
-    for(i=0; i<splitNum; i++) {
-        splitAmts.push(splitAmt);
-    }
+
 
     // console.log(`Bill is ${billAmt}`);
     // console.log(`Tip % is ${tipPct}`);
@@ -71,8 +66,20 @@ function handleCalculate(event) {
     // Display results
     displayResults(tipAmt,splitNum,splitAmt);
 
-    // Build pie chart with array of split amounts
-    buildPie(splitAmts);
+    // Clear any previous pie chart
+    d3.selectAll("#table-pie>div").remove();
+    d3.select("#table-pie").attr("class","");
+    // If split is chosen, build pie chart with array of split amounts
+    if (splitNum > 1) {
+        // Create array of split amounts
+        var splitAmts = [];
+        var i;
+        for(i=0; i<splitNum; i++) {
+            splitAmts.push(splitAmt);
+        }
+        // Build pie chart
+        buildPie(splitAmts);
+    }
 }
 
 function handleClear(event) {
@@ -147,39 +154,41 @@ function buildPie(splitAmts) {
         },
         showlegend: false
     };
-    
+
+    // define width of SVG as width of parent element
+    var pieWidth = document.getElementById('table-pie').offsetWidth - 20;
+
     // Create layout element
     var layout = {
         margin: {
-            l: 0,
-            r: 0,
+            l: 10,
+            r: 10,
             t: 0,
             b: 0
         },
         hovermode: false,
-        height: "width"
+        width: pieWidth,
+        height: pieWidth,
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)'
     };
     
     // Assign data variable for plotting
     var data = [trace];
-    
 
     // Select Results div
     var pieDiv = d3.select("#table-pie");
 
-    // Assign card class to Results div
+    // Assign card class to Pie div
     pieDiv.attr("class","card border-primary mb-3")
 
-    // Clear any previous results
-    d3.selectAll("#table-pie>div").remove();
-
     // Display results
-    var pieCard = pieDiv.append("div").text(`Useful* Visualization`).attr("class","card-header");
-    var pieCardBody = pieDiv.append("div").attr("class","card-body").attr("id","pie-chart");
+    pieDiv.append("div").text(`Useful* Visualization`).attr("class","card-header");
+    var pieCardBody = pieDiv.append("div").attr("class","card-body").attr("id","pie-chart").attr("style","padding:10px");
 
     // Draw pie chart
     Plotly.newPlot("pie-chart",data,layout,{displayModeBar: false},{responsive: true});
-    pieCardBody.append("p").text("*Usefulness may vary").attr("class","card-text"); 
+    pieCardBody.append("p").text("*Usefulness may vary").attr("class","card-text").attr("style","font-size:small"); 
 }
 
 // Function to create array and populate Split select dropdown
