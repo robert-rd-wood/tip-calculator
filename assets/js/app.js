@@ -97,21 +97,32 @@ function handleCalculate(event) {
     tipPct = +tipPct;
     splitNum = +splitNum;
 
+    console.log(`Initial values:  Bill is ${billAmt}, tip is ${tipPct}, split ${splitNum} ways.`);
+
     // Calculate tip
     var tipAmt = billAmt * (tipPct / 100)
     // Calculate split amount
     var splitAmt = tipAmt / splitNum;
 
+    console.log(`Calculations: Tip amount is ${tipAmt}, split amount is ${splitAmt}`);
+
+    // Round Tip Amount and Split Amount to two-decimal places
+    // (using a calculation, as .toFixed does not always behave properly)
+    // Save as strings to preserve trailing zeroes if they exist
+    var tipAmtStr = (Math.round( tipAmt * 100 ) / 100).toFixed(2);
+    var splitAmtStr = (Math.round( splitAmt * 100 ) / 100).toFixed(2);
+
     // Edge case handling
     // Increase splitAmt by $.01 if the combined tip is less than tipAmt due to rounding
-    if (splitAmt * splitNum < tipAmt) {
+    if (+splitAmtStr * splitNum < +tipAmtStr) {
         splitAmt += .01;
+        console.log(`Split amount after rounding is ${splitAmtStr}.  Handling edge case.`);
+        splitAmtStr = splitAmt.toFixed(2);
+        console.log(`After increment and rounding, split amount is now ${splitAmtStr}`);
     }
 
-    // Round Tip Amount and Split Amount to two-decimal places,
-    // save as strings to preserve trailing zeroes if they exist
-    tipAmtStr = tipAmt.toFixed(2);
-    splitAmtStr = splitAmt.toFixed(2);
+    console.log(`After rounding: Split amount is ${splitAmtStr}`);
+
 
     // Display results
     displayResults(tipAmtStr,splitNum,splitAmtStr);
