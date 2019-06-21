@@ -48,22 +48,24 @@ function handleCalculate(event) {
         tipPct = tipPct.slice(0, tipPct.length-1);
     }
 
-    // If Bill Amount and Tip Percentage are blank, exit the function
+    // If Bill Amount or Tip Percentage are blank, exit the function
     // (to avoid throwing errors on initial window resizing)
     if (billAmt == "" || tipPct == "") {
         return;
     }
-    
+
     // Check to see if Bill amount and Tip percentage are numbers
     if (isNaN(billAmt)) {
         // if not, throw an error, reset the field, and exit the function
         alert("Total Bill value must be a number.  Please enter a number and try again.");
+        // Reset field
         document.getElementById('bill-amt').value = '';
         return;
     }
     if (isNaN(tipPct)) {
         // if not, throw an error, reset the field, and exit the function
         alert("Tip Percentage value must be a number.  Please enter a number and try again.");
+        // Reset field
         document.getElementById('tip-pct').value = '';
         return;
     }
@@ -72,12 +74,14 @@ function handleCalculate(event) {
     if (billAmt <=0) {
         // if not, throw an error, reset the field, and exit the function
         alert("Total Bill value must be greater than 0.  Please enter a positive number and try again.");
+        // Reset Field
         document.getElementById('bill-amt').value = '';
         return;
     }
     if (tipPct <=0) {
         // if not, throw an error, reset the field, and exit the function
         alert("Total Bill value must be greater than 0.  Please enter a positive number and try again.");
+        // Reset field
         document.getElementById('tip-pct').value = '';
         return;
     }
@@ -97,6 +101,12 @@ function handleCalculate(event) {
     var tipAmt = billAmt * (tipPct / 100)
     // Calculate split amount
     var splitAmt = tipAmt / splitNum;
+
+    // Edge case handling
+    // Increase splitAmt by $.01 if the combined tip is less than tipAmt due to rounding
+    if (splitAmt * splitNum < tipAmt) {
+        splitAmt += .01;
+    }
 
     // Round Tip Amount and Split Amount to two-decimal places,
     // save as strings to preserve trailing zeroes if they exist
@@ -134,7 +144,10 @@ function handleClear(event) {
     document.getElementById('split-num').value = '';
 
     // Delete current chart
-    d3.select("#table-pie>div").remove();
+    d3.selectAll("#table-pie>div").remove();
+
+    // Remove card class from Pie div
+    d3.select("#table-pie").attr("class","");
 
     // Delete results
     d3.selectAll("#results>div").remove();
@@ -226,7 +239,7 @@ function buildPie(splitAmts) {
     pieDiv.attr("class","card border-primary mb-3")
 
     // Display results
-    pieDiv.append("div").text(`Useful* Visualization`).attr("class","card-header");
+    pieDiv.append("div").text(`Useful Visualization*`).attr("class","card-header");
     var pieCardBody = pieDiv.append("div").attr("class","card-body").attr("id","pie-chart").attr("style","padding:10px");
 
     // Draw pie chart
@@ -244,7 +257,7 @@ function populateSplit() {
         splitNums.push(i);
     }
 
-    // Select html element
+    // Select html element for Split select dropdown
     var splitNum = d3.select("#split-num");
 
     // Populate Split select dropdown
@@ -254,7 +267,7 @@ function populateSplit() {
     });
 }
 
-// Declare variable for Filter Table button
+// Declare variable for Calculate button
 var calculateButton = d3.select("#calculate-btn");
 
 // Declare variable for Clear Filter button
