@@ -34,19 +34,19 @@
                 <div class="form-group">
                   <ul class="list-group" id="inputs">
                     <!-- First input field -->
-                    <li class="filter list-group-item">
+                    <li class="list-group-item">
                       <label for="bill">Total Bill</label>
                       <input class="form-control" id="bill-amt" type="text">
                     </li>
                     <!-- Second input field -->
-                    <li class="filter list-group-item">
+                    <li class="list-group-item">
                       <label for="tip">Desired Tip Percentage</label>
-                      <input class="form-control" id="tip-pct" type="text" value="15%">
+                      <input class="form-control" id="tip-pct" type="text" pattern="[0-9]*" value="15%">
                     </li>
                     <!-- Third input field (select dropdown) -->
-                    <li class="filter list-group-item">
+                    <li class="list-group-item">
                       <label for="split">Number of People<br>(change if split is desired)</label>
-                      <select class="form-control" id="split-num" type="text">
+                      <select class="form-control" id="split-num" type="text" pattern="[0-9]*">
                       </select>
                     </li>
                   </ul>

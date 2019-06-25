@@ -104,6 +104,9 @@ function handleCalculate(event) {
         // Build pie chart
         buildPie(splitAmts);
     }
+
+    // Scroll down to see results
+    window.scrollTo(0,document.body.scrollHeight);
 }
 
 // Function to clear fields and remove Results and pie chart divs
