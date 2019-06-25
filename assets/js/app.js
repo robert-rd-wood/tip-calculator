@@ -1,32 +1,4 @@
-// Career Services Coding Challenge - Tip Calculator
-
-// The Challenge
-
-// Your task is to create a simple command-line (Node, Python or other) or front-end JavaScript application that will help calculate a tip at a restaurant for your server. No boilerplate code
-// will be provided, so you are free to construct this however you would like. However, your application must:
-    // * Take in the value of the bill
-    // * Take in the desired tip percentage
-    // * Include the option to split the tip amount by number of people at the table
-    // * The application should then calculate the amount of tip per table (or per person if the split option is chosen) and return that value to the user.
-
-// BONUS:
-    // * Create a simple UI so that this can be used in a browser
-    // * Deploy to your favorite hosting service (Heroku, Netlify, etc.)
-
-
-// The Process 
-// Career Services will evaluate the submissions and come to a consensus on a winner. You will be evaluated upon completion of the requirements of the challenge, code cleanliness, and formatting. Career Services will evaluate the entries and pick a winning submission and will announce on July 12, 2019. 
-// Restraints and Guidelines...
-// Please read these thoroughly. We will validate your submission based on the following criteria:
-    // * Your code should be clean and readable. Don't neglect the comments!
-    // * You must push your code in a git repository and submit git repository URL to the challenge email.
-    // * Commit early, commit often; we will look at the progression of your code throughout application development. Consider your commits valuable. 
-    // * You shouldn't need any external libraries to complete this application... BUT if you do, you need to document it in your readme and let us know why it was a better choice.
-
-// Some additional requirements for your application:
-    // * The bill value must be a positive float but your application must handle user input that might be a negative or 0 dollar amount (i.e. error handling).
-    // * The user input percentage for the tip must be a positive float.
-    // * The returned value must be a float rounded to two decimal points (i.e. accurate dollars and cents).
+// Coding Challenge - Tip Calculator
 
 // Function to calculate results based on input fields
 function handleCalculate(event) {
@@ -57,14 +29,14 @@ function handleCalculate(event) {
     // Check to see if Bill amount and Tip percentage are numbers
     if (isNaN(billAmt)) {
         // if not, throw an error, reset the field, and exit the function
-        alert("Total Bill value must be a number.  Please enter a number and try again.");
+        alert("!!!!!!!!!!!!!!Total Bill value must be a number.  Please enter a number and try again.");
         // Reset field
         document.getElementById('bill-amt').value = '';
         return;
     }
     if (isNaN(tipPct)) {
         // if not, throw an error, reset the field, and exit the function
-        alert("Tip Percentage value must be a number.  Please enter a number and try again.");
+        alert("!!!!!!!!!!!!!!Tip Percentage value must be a number.  Please enter a number and try again.");
         // Reset field
         document.getElementById('tip-pct').value = '';
         return;
@@ -73,38 +45,30 @@ function handleCalculate(event) {
     // Check to see if Bill Amount and Tip Percentage are > 0
     if (billAmt <=0) {
         // if not, throw an error, reset the field, and exit the function
-        alert("Total Bill value must be greater than 0.  Please enter a positive number and try again.");
+        alert("!!!!!!!!!!!!!!Total Bill value must be greater than 0.  Please enter a positive number and try again.");
         // Reset Field
         document.getElementById('bill-amt').value = '';
         return;
     }
     if (tipPct <=0) {
         // if not, throw an error, reset the field, and exit the function
-        alert("Total Bill value must be greater than 0.  Please enter a positive number and try again.");
+        alert("!!!!!!!!!!!!!!Tip percentage must be greater than 0.  Please enter a positive number and try again.");
         // Reset field
         document.getElementById('tip-pct').value = '';
         return;
     }
 
-    // Check if the tip was entered as decimal instead of %
-    if (tipPct < 1) {
-        // multiply by 100
-        tipPct *= 100;
-    }
+
 
     // Cast variables as numbers
     billAmt = +billAmt;
     tipPct = +tipPct;
     splitNum = +splitNum;
 
-    console.log(`Initial values:  Bill is ${billAmt}, tip is ${tipPct}, split ${splitNum} ways.`);
-
     // Calculate tip
     var tipAmt = billAmt * (tipPct / 100)
     // Calculate split amount
     var splitAmt = tipAmt / splitNum;
-
-    console.log(`Calculations: Tip amount is ${tipAmt}, split amount is ${splitAmt}`);
 
     // Round Tip Amount and Split Amount to two-decimal places
     // (using a calculation, as .toFixed does not always behave properly)
@@ -116,13 +80,8 @@ function handleCalculate(event) {
     // Increase splitAmt by $.01 if the combined tip is less than tipAmt due to rounding
     if (+splitAmtStr * splitNum < +tipAmtStr) {
         splitAmt += .01;
-        console.log(`Split amount after rounding is ${splitAmtStr}.  Handling edge case.`);
         splitAmtStr = splitAmt.toFixed(2);
-        console.log(`After increment and rounding, split amount is now ${splitAmtStr}`);
     }
-
-    console.log(`After rounding: Split amount is ${splitAmtStr}`);
-
 
     // Display results
     displayResults(tipAmtStr,splitNum,splitAmtStr);
@@ -151,8 +110,8 @@ function handleClear(event) {
 
     // Clear input fields
     document.getElementById('bill-amt').value = '';
-    document.getElementById('tip-pct').value = '';
-    document.getElementById('split-num').value = '';
+    document.getElementById('tip-pct').value = '15';
+    document.getElementById('split-num').value = '1';
 
     // Delete current chart
     d3.selectAll("#table-pie>div").remove();
@@ -296,3 +255,52 @@ populateSplit();
 // When the browser window is resized, handleCalculate() is called
 // to generate a rescaled pie chart
 d3.select(window).on("resize", handleCalculate);
+
+// var billAmtField = document.getElementById("bill-amt");
+// billAmtField.addEventListener('focusout', (event) => {
+
+// }
+
+///////////////////////////////////////////////////////
+
+var tipPctField = document.getElementById('tip-pct');
+
+// Add event listener for focusout to reformat entry and reformat
+tipPctField.addEventListener('focusout', (event) => {
+    console.log("focusout occurred");
+    var tipPctEntered = event.target.value;
+
+    // If percent sign was added, remove it for now and cast as a number
+    if (tipPctEntered[tipPctEntered.length - 1] == "%") {
+        tipPctEntered = +tipPctEntered.slice(0,tipPctEntered.length-1);
+    }
+    // Otherwise just cast as a number
+    else {
+        tipPctEntered = +tipPctEntered;
+    }
+    // Check if the tip was entered as decimal instead of percentage
+    if (tipPctEntered < 1) {
+        // multiply by 100
+        tipPctEntered = tipPctEntered * 100;
+    }
+    // Error checking
+    // Check to see if we have ended up with a valid number
+    if (isNaN(tipPctEntered)) {
+        // if not, throw an error and reset the field
+        alert("FOCUSOUT Tip Percentage value must be a number.  Please enter a number and try again.");
+        // Reset field
+        document.getElementById('tip-pct').value = '';
+    }
+    // Check that the tip is a positive number
+    else if (tipPctEntered <=0) {
+        // if not, throw an error and reset the field
+        alert("FOCUSOUT Tip percentage must be greater than 0.  Please enter a positive number and try again.");
+        // Reset field
+        document.getElementById('tip-pct').value = '';
+    }
+    // If error checking passes, reformat the field
+    else {
+        // Reformat the field
+        event.target.value = tipPctEntered + "%";
+    }
+});
