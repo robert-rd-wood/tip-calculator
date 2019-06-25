@@ -1,4 +1,9 @@
-// Coding Challenge - Tip Calculator
+/**
+ * Coding Challenge - Tip Calculator
+ * Case Western Reserve University
+ * Data Analytics Boot Camp
+ * Robert Wood
+ */ 
 
 // Function to calculate results based on input fields
 function handleCalculate(event) {
@@ -15,13 +20,14 @@ function handleCalculate(event) {
     if (billAmt[0] == "$") {
         billAmt = billAmt.slice(1, billAmt.length);
     }
+
     // Tip Percentage - strip trailing % if exists
     if (tipPct[tipPct.length-1] == "%") {
         tipPct = tipPct.slice(0, tipPct.length-1);
     }
 
-    // If Bill Amount or Tip Percentage are blank, exit the function
-    // (to avoid throwing errors on initial window resizing)
+    /* If Bill Amount or Tip Percentage are blank, exit the function
+    (to avoid throwing errors on initial window resizing) */
     if (billAmt == "" || tipPct == "") {
         return;
     }
@@ -58,8 +64,6 @@ function handleCalculate(event) {
         return;
     }
 
-
-
     // Cast variables as numbers
     billAmt = +billAmt;
     tipPct = +tipPct;
@@ -70,14 +74,14 @@ function handleCalculate(event) {
     // Calculate split amount
     var splitAmt = tipAmt / splitNum;
 
-    // Round Tip Amount and Split Amount to two-decimal places
-    // (using a calculation, as .toFixed does not always behave properly)
-    // Save as strings to preserve trailing zeroes if they exist
+    /* Round Tip Amount and Split Amount to two-decimal places,
+    using a calculation, as .toFixed does not always behave properly
+    Save as strings to preserve trailing zeroes if they exist */
     var tipAmtStr = (Math.round( tipAmt * 100 ) / 100).toFixed(2);
     var splitAmtStr = (Math.round( splitAmt * 100 ) / 100).toFixed(2);
 
-    // Edge case handling
-    // Increase splitAmt by $.01 if the combined tip is less than tipAmt due to rounding
+    /* Edge case handling
+    Increase splitAmt by $.01 if the combined tip is less than tipAmt due to rounding */
     if (+splitAmtStr * splitNum < +tipAmtStr) {
         splitAmt += .01;
         splitAmtStr = splitAmt.toFixed(2);
@@ -86,15 +90,15 @@ function handleCalculate(event) {
     // Display results
     displayResults(tipAmtStr,splitNum,splitAmtStr);
 
-    // Clear any previous pie chart
+    // Clear any previous pie chart and reset the class of the table-pie div
     d3.selectAll("#table-pie>div").remove();
     d3.select("#table-pie").attr("class","");
+
     // If split is chosen, build pie chart with array of split amounts
     if (splitNum > 1) {
         // Create array of split amounts
         var splitAmts = [];
-        var i;
-        for(i=0; i<splitNum; i++) {
+        for(var i=0; i<splitNum; i++) {
             splitAmts.push(splitAmt);
         }
         // Build pie chart
@@ -116,13 +120,13 @@ function handleClear(event) {
     // Delete current chart
     d3.selectAll("#table-pie>div").remove();
 
-    // Remove card class from Pie div
+    // Reset the class of the table-pie div
     d3.select("#table-pie").attr("class","");
 
     // Delete results
     d3.selectAll("#results>div").remove();
 
-    // Remove card class from Results div
+    // Reset the class of the results div
     d3.select("#results").attr("class","");
 }
 
@@ -138,10 +142,11 @@ function displayResults(tipAmtStr,splitNum,splitAmtStr) {
     // Clear any previous results
     d3.selectAll("#results>div").remove();
 
-    // Display results
+    // Create a card and display the calculated Tip Amount
     results.append("div").text(`Results`).attr("class","card-header");
     var resultCardBody = results.append("div").attr("class","card-body");
     resultCardBody.append("p").text(`Tip Amount: $${tipAmtStr}`).attr("class","card-text");
+
     // If the split option was chosen, display split information
     if (splitNum > 1) {
         resultCardBody.append("p").text(`Split between ${splitNum} people...`).attr("class","card-text");
@@ -153,11 +158,10 @@ function displayResults(tipAmtStr,splitNum,splitAmtStr) {
 function buildPie(splitAmts) {
 
     // Create arrays for labels, colors, and text using length of passed value array
-    var i;
     var labels = [];
     var colors = [];
     var splitAmtsFormatted = [];
-    for(i=0; i<splitAmts.length; i++) {
+    for(var i=0; i<splitAmts.length; i++) {
         labels.push(i+1);
         colors.push("#af8555");
         splitAmtsFormatted.push(`$${splitAmts[i].toFixed(2)}`);
@@ -219,11 +223,12 @@ function buildPie(splitAmts) {
 
 // Function to create array and populate Split select dropdown
 function populateSplit() {
+
     // Create array for Split select dropdown
     var splitNums = [];
-    var i;
+
     // Create array from 1 to 10 (increase '10' below to extend select dropdown)
-    for(i=1; i<=10; i++) {
+    for(var i=1; i<=10; i++) {
         splitNums.push(i);
     }
 
@@ -237,53 +242,55 @@ function populateSplit() {
     });
 }
 
-// Declare variable for Calculate button
-var calculateButton = d3.select("#calculate-btn");
-
-// Declare variable for Clear Filter button
-var clearButton = d3.select("#clear-btn");
-
-// Define Filter Table button action
-calculateButton.on("click",handleCalculate);
-
-// Define Clear Filter button action
-clearButton.on("click",handleClear);
-
-// Populate Split select dropdown on page load
-populateSplit();
-
-// When the browser window is resized, handleCalculate() is called
-// to generate a rescaled pie chart
-d3.select(window).on("resize", handleCalculate);
-
 // Define variable to hold the Total Bill field
-// var billAmtField = document.getElementById("bill-amt");
+var billAmtField = document.getElementById("bill-amt");
 
 // Add event listener for focusout to reformat entry
-// billAmtField.addEventListener('focusout', (event) => {
+billAmtField.addEventListener('focusout', (event) => {
 
-// }
+    // Define variable to hold the value entered in the field
+    var billAmtEntered = event.target.value;
 
-///////////////////////////////////////////////////////
+    // If dollar sign was added, remove it for now
+    if (billAmtEntered[0] == "$") {
+        billAmtEntered = billAmtEntered.slice(1,billAmtEntered.length);
+    }
 
+    // Check to see if we have ended up with a valid number
+    if (isNaN(billAmtEntered) || (billAmtEntered == "") || (billAmtEntered < 0)) {
+        // Do nothing, error will be thrown when Calculate is pressed
+    }
+    // If we have a number, cast as a number and reformat the field
+    else {
+        billAmtEntered = +billAmtEntered;
+
+        // Round and display Total Bill to two decimal places
+        billAmtEntered = (Math.round( billAmtEntered * 100 ) / 100).toFixed(2);
+
+        // Reformat the field
+        event.target.value = "$" + billAmtEntered;
+    }
+});
+
+// Define variable to hold the Desired Tip Percentage field
 var tipPctField = document.getElementById('tip-pct');
 
 // Add event listener for focusout to reformat entry
 tipPctField.addEventListener('focusout', (event) => {
-    console.log("focusout occurred");
+
+    // Define variable to hold the value entered in the field
     var tipPctEntered = event.target.value;
 
-    // If percent sign was added, remove it for now and cast as a number
+    // If percent sign was added, remove it for now
     if (tipPctEntered[tipPctEntered.length - 1] == "%") {
-        // tipPctEntered = +tipPctEntered.slice(0,tipPctEntered.length-1);
+        tipPctEntered = tipPctEntered.slice(0,tipPctEntered.length-1);
     }
 
-    // Error checking
     // Check to see if we have ended up with a valid number
     if (isNaN(tipPctEntered) || (tipPctEntered == "") || (tipPctEntered < 0)) {
         // Do nothing, error will be thrown when Calculate is pressed
     }
-    // If we have a number, cast as a number
+    // If we have a number, cast as a number and reformat the field
     else {
         tipPctEntered = +tipPctEntered;
 
@@ -293,7 +300,25 @@ tipPctField.addEventListener('focusout', (event) => {
             tipPctEntered = tipPctEntered * 100;
         }
         // Reformat the field
-            event.target.value = tipPctEntered + "%";
+        event.target.value = tipPctEntered + "%";
     }
-
 });
+
+// Declare variable for Calculate button
+var calculateButton = d3.select("#calculate-btn");
+
+// Declare variable for Clear Filter button
+var clearButton = d3.select("#clear-btn");
+
+// Define Calculate button action
+calculateButton.on("click",handleCalculate);
+
+// Define Clear Filter button action
+clearButton.on("click",handleClear);
+
+// Populate Split select dropdown on page load
+populateSplit();
+
+/* When the browser window is resized, handleCalculate() is called
+to generate a rescaled pie chart */
+d3.select(window).on("resize", handleCalculate);
