@@ -104,9 +104,6 @@ function handleCalculate(event) {
         // Build pie chart
         buildPie(splitAmts);
     }
-
-    // Scroll down to see results
-    window.scrollTo(0,document.body.scrollHeight);
 }
 
 // Function to clear fields and remove Results and pie chart divs
@@ -325,3 +322,10 @@ populateSplit();
 /* When the browser window is resized, handleCalculate() is called
 to generate a rescaled pie chart */
 d3.select(window).on("resize", handleCalculate);
+
+/* Add event listener to scroll to bottom of the page to view results
+(especially useful for mobile) */
+document.getElementById("calculate-btn").addEventListener("click", function() {
+    // Scroll down to see results
+    window.scrollTo(0,document.body.scrollHeight);
+});
