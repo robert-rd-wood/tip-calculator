@@ -29,14 +29,14 @@ function handleCalculate(event) {
     // Check to see if Bill amount and Tip percentage are numbers
     if (isNaN(billAmt)) {
         // if not, throw an error, reset the field, and exit the function
-        alert("!!!!!!!!!!!!!!Total Bill value must be a number.  Please enter a number and try again.");
+        alert("Total Bill value must be a number.  Please enter a number and try again.");
         // Reset field
         document.getElementById('bill-amt').value = '';
         return;
     }
     if (isNaN(tipPct)) {
         // if not, throw an error, reset the field, and exit the function
-        alert("!!!!!!!!!!!!!!Tip Percentage value must be a number.  Please enter a number and try again.");
+        alert("Tip Percentage value must be a number.  Please enter a number and try again.");
         // Reset field
         document.getElementById('tip-pct').value = '';
         return;
@@ -45,14 +45,14 @@ function handleCalculate(event) {
     // Check to see if Bill Amount and Tip Percentage are > 0
     if (billAmt <=0) {
         // if not, throw an error, reset the field, and exit the function
-        alert("!!!!!!!!!!!!!!Total Bill value must be greater than 0.  Please enter a positive number and try again.");
+        alert("Total Bill value must be greater than 0.  Please enter a positive number and try again.");
         // Reset Field
         document.getElementById('bill-amt').value = '';
         return;
     }
     if (tipPct <=0) {
         // if not, throw an error, reset the field, and exit the function
-        alert("!!!!!!!!!!!!!!Tip percentage must be greater than 0.  Please enter a positive number and try again.");
+        alert("Tip percentage must be greater than 0.  Please enter a positive number and try again.");
         // Reset field
         document.getElementById('tip-pct').value = '';
         return;
@@ -110,7 +110,7 @@ function handleClear(event) {
 
     // Clear input fields
     document.getElementById('bill-amt').value = '';
-    document.getElementById('tip-pct').value = '15';
+    document.getElementById('tip-pct').value = '';
     document.getElementById('split-num').value = '1';
 
     // Delete current chart
@@ -256,7 +256,10 @@ populateSplit();
 // to generate a rescaled pie chart
 d3.select(window).on("resize", handleCalculate);
 
+// Define variable to hold the Total Bill field
 // var billAmtField = document.getElementById("bill-amt");
+
+// Add event listener for focusout to reformat entry
 // billAmtField.addEventListener('focusout', (event) => {
 
 // }
@@ -265,42 +268,32 @@ d3.select(window).on("resize", handleCalculate);
 
 var tipPctField = document.getElementById('tip-pct');
 
-// Add event listener for focusout to reformat entry and reformat
+// Add event listener for focusout to reformat entry
 tipPctField.addEventListener('focusout', (event) => {
     console.log("focusout occurred");
     var tipPctEntered = event.target.value;
 
     // If percent sign was added, remove it for now and cast as a number
     if (tipPctEntered[tipPctEntered.length - 1] == "%") {
-        tipPctEntered = +tipPctEntered.slice(0,tipPctEntered.length-1);
+        // tipPctEntered = +tipPctEntered.slice(0,tipPctEntered.length-1);
     }
-    // Otherwise just cast as a number
-    else {
-        tipPctEntered = +tipPctEntered;
-    }
-    // Check if the tip was entered as decimal instead of percentage
-    if (tipPctEntered < 1) {
-        // multiply by 100
-        tipPctEntered = tipPctEntered * 100;
-    }
+
     // Error checking
     // Check to see if we have ended up with a valid number
-    if (isNaN(tipPctEntered)) {
-        // if not, throw an error and reset the field
-        alert("FOCUSOUT Tip Percentage value must be a number.  Please enter a number and try again.");
-        // Reset field
-        document.getElementById('tip-pct').value = '';
+    if (isNaN(tipPctEntered) || (tipPctEntered == "") || (tipPctEntered < 0)) {
+        // Do nothing, error will be thrown when Calculate is pressed
     }
-    // Check that the tip is a positive number
-    else if (tipPctEntered <=0) {
-        // if not, throw an error and reset the field
-        alert("FOCUSOUT Tip percentage must be greater than 0.  Please enter a positive number and try again.");
-        // Reset field
-        document.getElementById('tip-pct').value = '';
-    }
-    // If error checking passes, reformat the field
+    // If we have a number, cast as a number
     else {
+        tipPctEntered = +tipPctEntered;
+
+        // Check if the tip was entered as decimal instead of percentage
+        if (tipPctEntered < 1) {
+            // multiply by 100
+            tipPctEntered = tipPctEntered * 100;
+        }
         // Reformat the field
-        event.target.value = tipPctEntered + "%";
+            event.target.value = tipPctEntered + "%";
     }
+
 });
