@@ -32,35 +32,45 @@ function handleCalculate(event) {
         return;
     }
 
-    // Check to see if Bill amount and Tip percentage are numbers
+    // Declare error flags, to be set if an entry error is detected
+    var billAmtErr = false;
+    var tipPctErr = false;
+
+    // Check to see if Total Bill and Desired Tip Percentage are numbers
     if (isNaN(billAmt)) {
-        // if not, throw an error, reset the field, and exit the function
+        // if not, throw an error and set the error flag
         alert("Total Bill value must be a number.  Please enter a number and try again.");
-        // Reset field
-        document.getElementById('bill-amt').value = '';
-        return;
+        billAmtErr = true;
     }
     if (isNaN(tipPct)) {
-        // if not, throw an error, reset the field, and exit the function
+        // if not, throw an error and set the error flag
         alert("Tip Percentage value must be a number.  Please enter a number and try again.");
-        // Reset field
-        document.getElementById('tip-pct').value = '';
-        return;
+        tipPctErr = true;
     }
 
-    // Check to see if Bill Amount and Tip Percentage are > 0
+    // Check to see if Total Bill and Desired Tip Percentage are > 0
     if (billAmt <=0) {
-        // if not, throw an error, reset the field, and exit the function
+        // if not, throw an error and set the error flag
         alert("Total Bill value must be greater than 0.  Please enter a positive number and try again.");
-        // Reset Field
-        document.getElementById('bill-amt').value = '';
-        return;
+        billAmtErr = true;
     }
     if (tipPct <=0) {
         // if not, throw an error, reset the field, and exit the function
         alert("Tip percentage must be greater than 0.  Please enter a positive number and try again.");
-        // Reset field
+        tipPctErr = true;
+    }
+
+    // If an error was detected in the Total Bill field, reset the field
+    if (billAmtErr) {
+        document.getElementById('bill-amt').value = '';
+    }
+    // If an error was detected in the Desired Tip Percentage field, reset the field
+    if (tipPctErr) {
         document.getElementById('tip-pct').value = '';
+    }
+
+    // If either of the error flags were set during error checking, exit the function
+    if (billAmtErr || tipPctErr) {
         return;
     }
 

@@ -5,11 +5,23 @@ The purpose of this project was to create a user-friendly app to calculate a tip
 
 ---
 
+**Overview**  
+
+Desktop View  
+
+![alt text](assets/images/desktop.png "Calculation Results")
+
+Mobile View  
+
+![alt text](assets/images/mobile.png "Calculation Results")
+
+---
+
 **App Usage**  
 
 The app allows user input of the Total Bill, the Desired Tip Percentage, and offers the option to split the tip between multiple people.  Plotly was also used in order to display a visualization showing split amounts if the split option is chosen.
 
-![alt text](assets/images/results.png "Calculation Results")
+![alt text](assets/images/results.gif "Calculation Results")
 
 The fields will reformat after a valid number is entered (using focusout event listeners).  
 
