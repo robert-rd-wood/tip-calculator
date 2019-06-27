@@ -11,19 +11,25 @@ The app allows user input of the Total Bill, the Desired Tip Percentage, and off
 
 ![alt text](assets/images/results.gif "Calculation Results")
 
+---
+
+**Error Checking**  
+
 Alerts will be displayed and the errant field(s) will be reset if the user attempts to calculate using zero or a negative value for the total bill or desired tip percentage, or if the value entered into either field is not a valid number.  
 
 ![alt text](assets/images/alert.gif "Alert Example")
 
 ---
 
-**Layouts**  
+**Responsive Layouts**  
 
-Desktop View  
+  * Desktop Layout  
 
 ![alt text](assets/images/desktop.png "Calculation Results")
 
-Mobile View  
+-----
+
+  * Mobile Layout  
 
 ![alt text](assets/images/mobile.png "Calculation Results")
 
