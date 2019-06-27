@@ -27,8 +27,6 @@ Alerts will be displayed and the errant field(s) will be reset if the user attem
 
 ![alt text](assets/images/desktop.png "Calculation Results")
 
------
-
   * Mobile Layout  
 
 ![alt text](assets/images/mobile.png "Calculation Results")
