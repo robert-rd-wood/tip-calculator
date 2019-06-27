@@ -36,24 +36,28 @@ function handleCalculate(event) {
     var billAmtErr = false;
     var tipPctErr = false;
 
-    // Check to see if Total Bill and Desired Tip Percentage are numbers
+    // Check to see if Total Bill is a number
     if (isNaN(billAmt)) {
         // if not, throw an error and set the error flag
         alert("Total Bill value must be a number.  Please enter a number and try again.");
         billAmtErr = true;
     }
+
+    // Check to see if Total Bill is > 0
+    if (billAmt <=0) {
+        // if not, throw an error and set the error flag
+        alert("Total Bill value must be greater than 0.  Please enter a positive number and try again.");
+        billAmtErr = true;
+    }
+    
+    // Check to see if Desired Tip Percentage is a number
     if (isNaN(tipPct)) {
         // if not, throw an error and set the error flag
         alert("Tip Percentage value must be a number.  Please enter a number and try again.");
         tipPctErr = true;
     }
 
-    // Check to see if Total Bill and Desired Tip Percentage are > 0
-    if (billAmt <=0) {
-        // if not, throw an error and set the error flag
-        alert("Total Bill value must be greater than 0.  Please enter a positive number and try again.");
-        billAmtErr = true;
-    }
+    // Check to see if Desired Tip Percentage is > 0
     if (tipPct <=0) {
         // if not, throw an error, reset the field, and exit the function
         alert("Tip percentage must be greater than 0.  Please enter a positive number and try again.");

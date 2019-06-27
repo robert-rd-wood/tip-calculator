@@ -1,6 +1,7 @@
 # Tip Calculator PLUS
 
 **Description**  
+
 The purpose of this project was to create a user-friendly app to calculate a tip at a restaurant, and provide the option to split the tip between multiple people.  This app has been deployed to [Heroku](https://tip-calculator-plus.herokuapp.com), and is fully responsive for use on mobile and desktop.
 
 ---
