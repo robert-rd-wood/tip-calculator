@@ -26,7 +26,7 @@ function handleCalculate(event) {
         tipPct = tipPct.slice(0, tipPct.length-1);
     }
 
-    /* If Bill Amount or Tip Percentage are blank, exit the function
+    /* If Bill Amount or Desired Tip Percentage are blank, exit the function
     (to avoid throwing errors on initial window resizing) */
     if (billAmt == "" || tipPct == "") {
         return;
@@ -53,14 +53,14 @@ function handleCalculate(event) {
     // Check to see if Desired Tip Percentage is a number
     if (isNaN(tipPct)) {
         // if not, throw an error and set the error flag
-        alert("Tip Percentage value must be a number.  Please enter a number and try again.");
+        alert("Desired Tip Percentage value must be a number.  Please enter a number and try again.");
         tipPctErr = true;
     }
 
     // Check to see if Desired Tip Percentage is > 0
     if (tipPct <=0) {
         // if not, throw an error, reset the field, and exit the function
-        alert("Tip percentage must be greater than 0.  Please enter a positive number and try again.");
+        alert("Desired Tip Percentage must be greater than 0.  Please enter a positive number and try again.");
         tipPctErr = true;
     }
 
